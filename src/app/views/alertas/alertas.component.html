@@ -1,0 +1,95 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Alertas</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Alertas</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3">
+          <!-- Profile Image -->
+          <div class="card card-secondary card-outline">
+            <div class="card-body box-profile">
+              <div class="text-center">
+                <i class="fas fa-bullhorn fa-4x"></i>
+              </div>
+
+              <h3 class="profile-username text-center">Novo Alerta</h3>
+
+              <form [formGroup]="alertaForm" (ngSubmit)="enviarAlerta()">
+                <div class="row">
+                  <!-- select -->
+                    <label>Nível do Alerta</label>
+                    <select formControlName="criticidade" class="form-control">
+                      <option>Emergência</option>
+                      <option>Cuidado</option>
+                      <option>Informação</option>
+                    </select>
+                </div>
+                <div class="form-group"></div>
+
+                <div class="row">
+                  <label>Mensagem</label>
+                  <textarea formControlName="mensagem" type="text" class="form-control" placeholder="Mensagem Alerta"></textarea>
+                </div>
+                <div class="form-group"></div>
+
+              <app-button [type]="'submit'" [block]="true" [text]="'Enviar'" [loading]="isAuthLoading"></app-button>
+            </form>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <!-- START ALERTS -->
+          <div class="card card-info card-outline">
+            <div class="card-header">
+              <h3 class="card-title">
+
+                Alertas Disparados
+              </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <div class="alert alert-danger">
+                <h5><i class="icon fas fa-ban"></i>Emergência</h5>
+                Fogo no laboratorio de Informática 1
+              </div>
+              <div class="alert alert-info">
+                <h5><i class="icon fas fa-info"></i>Informação</h5>
+                Alerta Informativo.
+              </div>
+              <div class="alert alert-warning">
+                <h5><i class="icon fas fa-exclamation-triangle"></i>Cuidado</h5>
+                Falta de Energia no campus.
+              </div>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        <!-- END ALERTS -->
+          <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+

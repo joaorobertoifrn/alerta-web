@@ -23,6 +23,7 @@ import localeEn from '@angular/common/locales/en';
 import { UserDropdownMenuComponent } from './pages/main/header/user-dropdown-menu/user-dropdown-menu.component';
 
 import { AppSettingsService } from './shared/appsettings.service';
+import { AlertasComponent } from './views/alertas/alertas.component';
 
 
 
@@ -47,6 +48,7 @@ registerLocaleData(localeEn, 'en-EN');
     DashboardComponent,
     ProfileComponent,
     AppButtonComponent,
+    AlertasComponent,
   ],
   imports: [
     BrowserModule,

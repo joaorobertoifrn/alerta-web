@@ -8,38 +8,20 @@ import { RegisterComponent } from './pages/register/register.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { AuthGuard } from './utils/guards/auth.guard';
 import { NonAuthGuard } from './utils/guards/non-auth.guard';
+import { AlertasComponent } from './views/alertas/alertas.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: MainComponent,
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
+    path: '', component: MainComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard],
     children: [
-      {
-        path: 'profile',
-        component: ProfileComponent,
-      },
-      {
-        path: 'blank',
-        component: BlankComponent,
-      },
-      {
-        path: '',
-        component: DashboardComponent,
-      },
+      { path: 'alertas', component: AlertasComponent,},
+      { path: 'profile', component: ProfileComponent,},
+      { path: 'blank', component: BlankComponent,},
+      { path: '', component: DashboardComponent,},
     ],
   },
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [NonAuthGuard],
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    canActivate: [NonAuthGuard],
-  },
+  { path: 'login', component: LoginComponent,canActivate: [NonAuthGuard],},
+  { path: 'register', component: RegisterComponent, canActivate: [NonAuthGuard],},
   { path: '**', redirectTo: '' },
 ];
 
