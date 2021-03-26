@@ -1,7 +1,7 @@
 @import '~admin-lte/plugins/fontawesome-free/css/all.min.css';
 @import '~admin-lte/plugins/icheck-bootstrap/icheck-bootstrap.min.css';
 @import '~admin-lte/dist/css/adminlte.min.css';
-
+@import '~admin-lte/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css';
 @import '~ngx-toastr/toastr';
 
 ::-webkit-scrollbar {

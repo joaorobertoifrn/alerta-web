@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,15 +24,15 @@ import { UserDropdownMenuComponent } from './pages/main/header/user-dropdown-men
 
 import { AppSettingsService } from './shared/appsettings.service';
 import { AlertasComponent } from './views/alertas/alertas.component';
-
-
+import { UsuarioComponent } from './views/usuario/usuario.component';
+import { UsuarioService } from './utils/services/usuario.service';
+import { StorageService } from './utils/services/storage.service';
+import { LoginService } from './utils/services/login.service';
+import { AlertaService } from './utils/services/alerta.service';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { FormsModule } from '@angular/forms';
 
 registerLocaleData(localeEn, 'en-EN');
-
-
-
-
-
 
 @NgModule({
   declarations: [
@@ -49,9 +49,11 @@ registerLocaleData(localeEn, 'en-EN');
     ProfileComponent,
     AppButtonComponent,
     AlertasComponent,
+    UsuarioComponent,
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
@@ -63,7 +65,14 @@ registerLocaleData(localeEn, 'en-EN');
     NgbModule,
     HttpClientModule
   ],
-  providers: [AppSettingsService],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    AppSettingsService,
+    AlertaService,
+    UsuarioService,
+    StorageService,
+    LoginService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

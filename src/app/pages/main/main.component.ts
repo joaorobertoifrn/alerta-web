@@ -1,7 +1,9 @@
 import { Component, OnInit,Renderer2, ViewChild  } from '@angular/core';
-import { stringify } from 'querystring';
+import { Router } from '@angular/router';
 import { AppSettings } from 'src/app/shared/appsettings';
 import { AppSettingsService } from 'src/app/shared/appsettings.service';
+import { LoginService } from 'src/app/utils/services/login.service';
+import { StorageService } from 'src/app/utils/services/storage.service';
 
 @Component({
   selector: 'app-main',
@@ -9,6 +11,8 @@ import { AppSettingsService } from 'src/app/shared/appsettings.service';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
+
+
   public sidebarMenuOpened = true;
   public sidebarControlOpened = false;
   defaultBgColor:string;
@@ -26,33 +30,39 @@ export class MainComponent implements OnInit {
 
   @ViewChild('contentWrapper', { static: false }) contentWrapper;
 
+
+
   constructor(private renderer: Renderer2,
-              private appSettingsService: AppSettingsService) {
+              private appSettingsService: AppSettingsService,
+              public storage: StorageService,
+              public auth: LoginService,
+              private router: Router
+              ) {
 
                }
 
   ngOnInit(): void {
-    this.renderer.removeClass(document.querySelector('app-root'), 'login-page');
-    this.renderer.removeClass(
-      document.querySelector('app-root'),
-      'register-page'
-    );
-      this.getNavDefaultColor();
+    this.renderer.removeClass(document.querySelector('app-root'),'login-page');
+    this.renderer.removeClass(document.querySelector('app-root'),'register-page');
+    this.getNavDefaultColor();
+    this.renderer.addClass(document.querySelector('app-root'),this.defaultHyperlinkColor);
+    this.renderer.addClass(document.querySelector('app-root'),this.defaultText);
+    this.renderer.addClass(document.querySelector('.nav-pills'),this.defaultNavStyle);
 
-      this.renderer.addClass(
-        document.querySelector('app-root'),
-        this.defaultHyperlinkColor
-      );
+    const localUser = this.storage.getLocalUser();
 
-      this.renderer.addClass(
-        document.querySelector('app-root'),
-        this.defaultText
-      );
+    if (localUser) {
+      this.auth.refreshToken().subscribe(
+        responseAuth => {
+          this.auth.successfulLogin(responseAuth.headers.get('Authorization'));
+        },
+        error => {
+          this.router.navigate(['/login']);
+        });
 
-      this.renderer.addClass(
-        document.querySelector('.nav-pills'),
-        this.defaultNavStyle
-    ); 
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   getNavDefaultColor(){
@@ -100,23 +110,23 @@ export class MainComponent implements OnInit {
         'control-sidebar-slide-open'
       );
       this.sidebarControlOpened = true;
-    }    
+    }
   }
-  noNavbar(value){    
+  noNavbar(value){
     this.renderer.removeClass(
       document.querySelector('.navbar'),
       this.defaultNavBottomBorder
-    );    
+    );
     if(value){
       this.noNavbarValue="border-bottom-0";
     }else{
       this.noNavbarValue="border-bottom-1";
-    }   
+    }
     this.renderer.addClass(
         document.querySelector('.navbar'),
         this.noNavbarValue
-    ); 
-    
+    );
+
     this.saveNoNavBarSetting(this.noNavbarValue);
   }
 
@@ -126,21 +136,21 @@ export class MainComponent implements OnInit {
     this.appSettingsService.saveSettings(this.settings);
   }
 
-  smallText(value){    
+  smallText(value){
     this.renderer.removeClass(
       document.querySelector('app-root'),
       this.defaultText
-    );    
+    );
     if(value){
       this.textValue="text-sm";
     }else{
       this.textValue="text-mm";
-    }   
+    }
     this.renderer.addClass(
         document.querySelector('app-root'),
         this.textValue
-    ); 
-    
+    );
+
     this.saveSmallTextSetting(this.textValue);
   }
 
@@ -150,29 +160,29 @@ export class MainComponent implements OnInit {
     this.appSettingsService.saveSettings(this.settings);
   }
 
-  sideNavStyle(data){   
-    var navbarstyle; 
+  sideNavStyle(data){
+    var navbarstyle;
 
 
     this.renderer.removeClass(
       document.querySelector('.nav-pills'),
       this.defaultNavStyle
-    );  
-    
+    );
+
     navbarstyle= data.navstyle;
     if(data.boolCheck){
 
       this.renderer.addClass(
         document.querySelector('.nav-pills'),
         data.navstyle
-    );       
+    );
     }else{
         this.renderer.removeClass(
           document.querySelector('.nav-pills'),
           data.navstyle
-      ); 
-    }   
-       
+      );
+    }
+
     this.saveNavStyleSetting(navbarstyle);
   }
 
@@ -189,7 +199,7 @@ export class MainComponent implements OnInit {
         document.querySelector('.brand-link'),
         this.defaultBrandlogoColor
       );
-    }    
+    }
 
     this.renderer.addClass(
       document.querySelector('.brand-link'),
@@ -249,7 +259,7 @@ export class MainComponent implements OnInit {
 
   navVarientClick(navcolor){
     this.getNavDefaultColor();
-    
+
     this.renderer.removeClass(
       document.querySelector('.navbar'),
       this.defaultBgColor
@@ -258,7 +268,7 @@ export class MainComponent implements OnInit {
       document.querySelector('.navbar'),
       this.defaultTxtColor
     );
-   
+
     this.renderer.addClass(
       document.querySelector('.navbar'),
       navcolor.bgcolor
@@ -266,12 +276,12 @@ export class MainComponent implements OnInit {
     this.renderer.addClass(
       document.querySelector('.navbar'),
       navcolor.txtcolor
-    ); 
-    this.saveNavVarientSettings(navcolor);  
+    );
+    this.saveNavVarientSettings(navcolor);
   }
 
   saveNavVarientSettings(navcolor): void {
-    
+
     this.settings.defaultNavbgColor = navcolor.bgcolor;
     this.settings.defaultNavtxtColor = navcolor.txtcolor;
     this.appSettingsService.saveSettings(this.settings);

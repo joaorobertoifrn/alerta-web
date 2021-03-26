@@ -21,16 +21,14 @@
     <div class="container-fluid">
       <div class="row">
         <div class="col-md-3">
-          <!-- Profile Image -->
+          <!-- Novo Alerta -->
           <div class="card card-secondary card-outline">
             <div class="card-body box-profile">
               <div class="text-center">
                 <i class="fas fa-bullhorn fa-4x"></i>
               </div>
-
               <h3 class="profile-username text-center">Novo Alerta</h3>
-
-              <form [formGroup]="alertaForm" (ngSubmit)="enviarAlerta()">
+              <form [formGroup]="alertaForm" (ngSubmit)="enviarAlerta()" method="POST">
                 <div class="row">
                   <!-- select -->
                     <label>Nível do Alerta</label>
@@ -44,7 +42,7 @@
 
                 <div class="row">
                   <label>Mensagem</label>
-                  <textarea formControlName="mensagem" type="text" class="form-control" placeholder="Mensagem Alerta"></textarea>
+                  <textarea formControlName="texto" type="text" class="form-control" placeholder="Mensagem Alerta"></textarea>
                 </div>
                 <div class="form-group"></div>
 
@@ -60,25 +58,49 @@
           <!-- START ALERTS -->
           <div class="card card-info card-outline">
             <div class="card-header">
-              <h3 class="card-title">
+              <h3 class="card-title">Alertas Disparados</h3>
+              <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 300px;">
+                  <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
 
-                Alertas Disparados
-              </h3>
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
             </div>
             <!-- /.card-header -->
-            <div class="card-body">
-              <div class="alert alert-danger">
-                <h5><i class="icon fas fa-ban"></i>Emergência</h5>
-                Fogo no laboratorio de Informática 1
-              </div>
-              <div class="alert alert-info">
-                <h5><i class="icon fas fa-info"></i>Informação</h5>
-                Alerta Informativo.
-              </div>
-              <div class="alert alert-warning">
-                <h5><i class="icon fas fa-exclamation-triangle"></i>Cuidado</h5>
-                Falta de Energia no campus.
-              </div>
+            <div class="card-body table-responsive p-0">
+              <table class="table table-head-fixed text-nowrap">
+                <thead>
+                  <tr>
+                    <th>Alertas</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let alerta of alertas">
+
+                    <td class="alerta-display text-left">
+                      <div *ngIf="alerta.criticidade == 'Emergencia'" class="alert alert-danger">
+                        <h6><i class="icon fas fa-ban"></i>Emergência</h6>
+                        {{ alerta.texto }}
+                      </div>
+                      <div *ngIf="alerta.criticidade == 'Informacao'" class="alert alert-info">
+                        <h6><i class="icon fas fa-info"></i>Informação</h6>
+                        {{ alerta.texto }}
+                      </div>
+                      <div *ngIf="alerta.criticidade == 'Cuidado'" class="alert alert-warning">
+                        <h6><i class="icon fas fa-exclamation-triangle"></i>Cuidado</h6>
+                        {{ alerta.texto }}
+                      </div>
+
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <!-- /.card-body -->
           </div>

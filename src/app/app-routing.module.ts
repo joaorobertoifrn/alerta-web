@@ -9,12 +9,14 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { AuthGuard } from './utils/guards/auth.guard';
 import { NonAuthGuard } from './utils/guards/non-auth.guard';
 import { AlertasComponent } from './views/alertas/alertas.component';
+import { UsuarioComponent } from './views/usuario/usuario.component';
 
 const routes: Routes = [
   {
     path: '', component: MainComponent, canActivate: [AuthGuard], canActivateChild: [AuthGuard],
     children: [
-      { path: 'alertas', component: AlertasComponent,},
+      { path: 'alerta', component: AlertasComponent,},
+      { path: 'usuario', component: UsuarioComponent,},
       { path: 'profile', component: ProfileComponent,},
       { path: 'blank', component: BlankComponent,},
       { path: '', component: DashboardComponent,},

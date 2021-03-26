@@ -1,22 +1,17 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { StorageService } from './storage.service';
 import { API_CONFIG } from 'src/app/config/api.config';
 import { Credenciais } from 'src/app/models/credenciais.model';
 import { LocalUser } from 'src/app/models/local_user';
-import { StorageService } from './storage.service';
-import { UsuarioService } from './usuario.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AppService {
+@Injectable()
+export class LoginService {
 
   jwtHelper: JwtHelperService = new JwtHelperService();
 
-
-  constructor(public http: HttpClient, public storage: StorageService, private router: Router, public usuarioService: UsuarioService) { }
+  constructor(public http: HttpClient, public storage: StorageService) {}
 
   refreshToken() {
     return this.http.post(
@@ -48,12 +43,7 @@ export class AppService {
     this.storage.setLocalUser(user);
   }
 
-  register() {
-  }
-
   logout() {
     this.storage.setLocalUser(null);
-    this.router.navigate(['/login']);
   }
-
 }

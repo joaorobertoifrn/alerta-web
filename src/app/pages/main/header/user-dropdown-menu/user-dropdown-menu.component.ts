@@ -1,5 +1,10 @@
 import { Component, OnInit,ViewChild,HostListener,ElementRef,Renderer2 } from '@angular/core';
 import { AppService } from 'src/app/utils/services/app.service';
+import { UsuarioService } from 'src/app/utils/services/usuario.service';
+import { StorageService } from '../../../../utils/services/storage.service';
+import { UsuarioDTO } from '../../../../models/dto/usuarioDTO.model';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/utils/services/login.service';
 
 @Component({
   selector: 'app-user-dropdown-menu',
@@ -8,7 +13,7 @@ import { AppService } from 'src/app/utils/services/app.service';
 })
 export class UserDropdownMenuComponent implements OnInit {
 
-  public user;
+  public usuarioDTO: UsuarioDTO;
 
   @ViewChild('dropdownMenu', { static: false }) dropdownMenu;
   @HostListener('document:click', ['$event'])
@@ -20,10 +25,36 @@ export class UserDropdownMenuComponent implements OnInit {
 
   constructor(private elementRef: ElementRef,
               private renderer: Renderer2,
-              private appService: AppService) { }
+              private appService: AppService,
+              public storage: StorageService,
+              private router: Router,
+              public auth: LoginService,
+              public usuarioService: UsuarioService
+              ) { }
 
   ngOnInit(): void {
-    this.user = this.appService.user;
+    const localUser = this.storage.getLocalUser();
+
+    if (localUser) {
+      this.auth.refreshToken().subscribe(
+        responseAuth => {
+          this.auth.successfulLogin(responseAuth.headers.get('Authorization'));
+        },
+        error => {
+          this.router.navigate(['/login']);
+        });
+
+      this.usuarioService.findByEmail(localUser.email).subscribe(
+        responseUser => {
+          this.usuarioDTO = responseUser as UsuarioDTO;
+
+        },
+        error => {});
+
+    } else {
+      this.router.navigate(['/login']);
+    }
+
   }
 
   toggleDropdownMenu() {

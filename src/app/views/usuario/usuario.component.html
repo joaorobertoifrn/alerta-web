@@ -1,0 +1,177 @@
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1>Cadastro de Usuário</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Cadastro de Usuário</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <!-- /.container-fluid -->
+</section>
+
+  <!-- Main content -->
+  <section class="content">
+
+    <div class="container-fluid">
+
+  <!-- /.Modal-Cadastro -->
+  <div class="modal fade" id="modal-cadastro">
+    <div class="modal-dialog">
+      <form [formGroup]="usuarioForm" method="post">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h4 class="modal-title">Usuário</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+          </div>
+          <div class="modal-body">
+            <input formControlName="id" type="text" hidden>
+
+              <label stacked>Nome*</label>
+              <input formControlName="nome" type="text" class="form-control" placeholder="nome">
+              <div class="form-group"></div>
+
+              <label stacked>Email*</label>
+              <input formControlName="email" type="email" class="form-control" placeholder="Email">
+              <div class="form-group"></div>
+
+              <label stacked>Imagem</label>
+              <input formControlName="imagem" type="text" class="form-control" placeholder="Imagem">
+              <div class="form-group"></div>
+
+              <div class="form-group" *ngIf=" usuario?.id == null ">
+                <label stacked>Senha*</label>
+                <input formControlName="senha" type="password" class="form-control" placeholder="Senha">
+              </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger pull-left" (click)="inicializarForm()" data-dismiss="modal">Cancelar</button>
+            <button type="submit" [disabled]="usuarioForm.invalid" (click)="salvarUsuario()" class="btn btn-primary" data-dismiss="modal">Salvar</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </form>
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.Modal-Cadastro -->
+
+  <!-- /.Modal-Deletar -->
+  <div class="modal fade" id="modal-delete">
+    <div class="modal-dialog">
+      <form method="delete">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h4 class="modal-title">Deletar Usuário</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+
+          </div>
+          <div class="modal-body">
+            <span>Tem certeza que deseja apagar o usuário abaixo ?</span>
+
+            <p>{{usuario?.id}} - {{usuario?.nome}}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default pull-left" (click)="inicializarForm()"  data-dismiss="modal">Cancelar</button>
+            <button type="submit" (click)="deletarUsuario(usuario.id)" class="btn btn-danger" data-dismiss="modal">Confirmar</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </form>
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.Modal-Deletar -->
+
+      <div class="row">
+        <div class="col-md-3">
+          <!-- Novo Alerta -->
+          <div class="card card-secondary card-outline">
+            <div class="card-body box-profile">
+              <div class="text-center">
+                <i class="fas fa-address-card fa-4x"></i>
+              </div>
+              <h3 class="profile-username text-center">Novo Usuário</h3>
+              <div class="form-group"></div>
+              <button type="button" class="btn btn-block bg-gradient-primary" data-toggle="modal" data-target="#modal-cadastro">
+                Cadastrar
+              </button>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+          <!-- START ALERTS -->
+          <div class="card card-info card-outline">
+            <div class="card-header">
+              <h3 class="card-title">Usuários</h3>
+              <div class="card-tools">
+                <div class="input-group input-group-sm" style="width: 300px;">
+                  <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-default">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0">
+              <table class="table table-head-fixed text-nowrap">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Path Imagem</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let usuario of usuarios">
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.imagem }}</td>
+                    <td class="text-center">
+                      <a class="btn btn-link" (click)="carregarUsuario(usuario.id)" data-toggle="modal" data-target="#modal-cadastro">
+                        <span class="fa fa-pen-square"></span>
+                      </a>
+                      <a class="btn btn-link" (click)="carregarUsuario(usuario.id)" data-toggle="modal" data-target="#modal-delete">
+                        <span class="fa fa-times-circle"></span>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        <!-- END ALERTS -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>

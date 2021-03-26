@@ -7,13 +7,13 @@
       <div class="card-body login-card-body">
         <p class="login-box-msg">Informe sua matrícula e a senha do SUAP</p>
 
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <form [formGroup]="loginForm" method="POST">
           <div class="input-group mb-3">
             <input
               formControlName="email"
-              type="number"
+              type="email"
               class="form-control"
-              placeholder="Matrícula"
+              placeholder="Email"
             />
             <div class="input-group-append">
               <div class="input-group-text">
@@ -35,23 +35,11 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-7">
-              <div class="icheck-primary">
-                <input type="checkbox" id="remember" />
-                <label for="remember">
-                  Lembrar
-                </label>
-              </div>
-            </div>
+
             <!-- /.col -->
-            <div class="col-5">
-              <app-button
-                [type]="'submit'"
-                [block]="true"
-                [text]="'Login'"
-                [loading]="isAuthLoading"
-              ></app-button>
-            </div>
+
+              <button type="submit" (click)="login()" class="btn btn-primary btn-block btn-flat">Login</button>
+
             <!-- /.col -->
           </div>
         </form>
