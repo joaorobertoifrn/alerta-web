@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\jpereir3\Bitbucket\TCC\alerta-frontend-web\src\polyfills.ts */"hN/g");
+module.exports = __webpack_require__(/*! /home/ubuntu/alerta-frontend-web/src/polyfills.ts */"hN/g");
 
 
 /***/ }),
