@@ -1,0 +1,35 @@
+table {
+  width: 100%;
+}
+
+.card-tela-novo {
+  padding-left: 1%;
+  padding-right: 1%;
+  margin-left: 5%;
+}
+
+.card-tela {
+  padding-left: 1%;
+  padding-right: 1%;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+  padding-left: 1%;
+  padding-right: 1%;
+}
+
+tr.alerta-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.alerta-row:not(.example-expanded-row):active {
+  background: #efefef;
+}
+
+.example-button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}

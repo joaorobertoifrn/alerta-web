@@ -15,6 +15,10 @@ export class AlertaService {
     return this.http.get<AlertaDTO[]>(`${API_CONFIG.baseUrl}/alertas`);
   }
 
+  findAlertaEmitido(): Observable<AlertaDTO[]> {
+    return this.http.get<AlertaDTO[]>(`${API_CONFIG.baseUrl}/alertas/alertaEmitido`);
+  }
+
   findById(id: string) {
     return this.http.get<AlertaDTO>(`${API_CONFIG.baseUrl}/alertas/${id}`);
   }

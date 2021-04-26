@@ -15,4 +15,5 @@ export interface Alerta {
   criticidade: string;
   equipamento: string;
   localEquipamento: string;
+  disparado: string;
 }

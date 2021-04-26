@@ -15,4 +15,5 @@ export interface AlertaDTO {
   criticidade: string;
   equipamento: string;
   localEquipamento: string;
+  disparado: string;
 }

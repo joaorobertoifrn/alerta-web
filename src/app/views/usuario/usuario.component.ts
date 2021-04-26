@@ -1,8 +1,5 @@
-import { Renderer2 } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { FormBuilder } from '@angular/forms';
-import { FormGroup } from '@angular/forms';
+import { Renderer2, Component, OnInit } from '@angular/core';
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/usuario.model';
@@ -15,6 +12,7 @@ import { UsuarioService } from 'src/app/utils/services/usuario.service';
   styleUrls: ['./usuario.component.css']
 })
 export class UsuarioComponent implements OnInit {
+
 
   // lista de Usuarios
   public usuarios: Usuario[] = [];

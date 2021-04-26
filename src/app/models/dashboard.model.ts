@@ -1,4 +1,5 @@
 export interface Dashboard {
-  totalAutores: string;
-  totalObras: string;
+  alertaCuidado: string;
+  alertaInformacao: string;
+  alertaEmergencia: string;
 }

@@ -16,102 +16,130 @@
   <!-- /.container-fluid -->
 </section>
 
-  <!-- Main content -->
-  <section class="content">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3">
-          <!-- Novo Alerta -->
-          <div class="card card-secondary card-outline">
-            <div class="card-body box-profile">
-              <div class="text-center">
-                <i class="fas fa-bullhorn fa-4x"></i>
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <!-- Novo Alerta -->
+        <div class="card card-secondary card-outline card-tela-novo">
+          <div class="card-body box-profile">
+            <div class="text-center">
+              <em class="fas fa-bullhorn fa-4x"></em>
+            </div>
+            <h3 class="profile-username text-center">Novo Alerta</h3>
+            <form [formGroup]="alertaForm" (ngSubmit)="inserirAlerta()" method="POST">
+              <div class="row">
+                <!-- select -->
+                <label>Nível do Alerta</label>
+                <select formControlName="criticidade" class="form-control">
+                  <option>Emergência</option>
+                  <option>Cuidado</option>
+                  <option>Informação</option>
+                </select>
               </div>
-              <h3 class="profile-username text-center">Novo Alerta</h3>
-              <form [formGroup]="alertaForm" (ngSubmit)="enviarAlerta()" method="POST">
-                <div class="row">
-                  <!-- select -->
-                    <label>Nível do Alerta</label>
-                    <select formControlName="criticidade" class="form-control">
-                      <option>Emergência</option>
-                      <option>Cuidado</option>
-                      <option>Informação</option>
-                    </select>
-                </div>
-                <div class="form-group"></div>
+              <div class="form-group"></div>
 
-                <div class="row">
-                  <label>Mensagem</label>
-                  <textarea formControlName="texto" type="text" class="form-control" placeholder="Mensagem Alerta"></textarea>
-                </div>
-                <div class="form-group"></div>
+              <div class="row">
+                <label>Mensagem</label>
+                <textarea formControlName="texto" type="text" class="form-control" placeholder="Mensagem Alerta"></textarea>
+              </div>
+              <div class="form-group"></div>
 
               <app-button [type]="'submit'" [block]="true" [text]="'Enviar'" [loading]="isAuthLoading"></app-button>
             </form>
-            </div>
-            <!-- /.card-body -->
           </div>
-          <!-- /.card -->
+          <!-- /.card-body -->
         </div>
-        <!-- /.col -->
-        <div class="col-md-9">
-          <!-- START ALERTS -->
-          <div class="card card-info card-outline">
-            <div class="card-header">
-              <h3 class="card-title">Alertas Disparados</h3>
-              <div class="card-tools">
-                <div class="input-group input-group-sm" style="width: 300px;">
-                  <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+      <div class="col-md-9">
+        <!-- START ALERTS -->
+        <div class="card card-info card-outline card-tela">
+          <div class="card-header">
+            <h3 class="card-title">Alertas Recebidos</h3>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body table-responsive p-0">
+            <mat-form-field>
+              <mat-label >Filtro</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Texto" #input>
+            </mat-form-field>
 
-                  <div class="input-group-append">
-                    <button type="submit" class="btn btn-default">
-                      <i class="fas fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
+            <div class="mat-elevation-z8">
+              <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
 
-            </div>
-            <!-- /.card-header -->
-            <div class="card-body table-responsive p-0">
-              <table class="table table-head-fixed text-nowrap">
-                <thead>
-                  <tr>
-                    <th>Alertas</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let alerta of alertas">
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                  <th id="id" mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                  <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                </ng-container>
 
-                    <td class="alerta-display text-left">
-                      <div *ngIf="alerta.criticidade == 'Emergencia'" class="alert alert-danger">
-                        <h6><i class="icon fas fa-ban"></i>Emergência</h6>
-                        {{ alerta.texto }}
+                <!-- Progress Column -->
+                <ng-container matColumnDef="instante">
+                  <th id="instante" mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
+                  <td mat-cell *matCellDef="let row"> {{row.instante}}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="criticidade">
+                  <th id="criticidade" mat-header-cell  *matHeaderCellDef mat-sort-header>Nivel Alerta</th>
+                  <td mat-cell *matCellDef="let row"> {{row.criticidade}}</td>
+                </ng-container>
+
+                <!-- Color Column -->
+                <ng-container matColumnDef="texto">
+                  <th id="texto" mat-header-cell *matHeaderCellDef mat-sort-header>Mensagem</th>
+                  <td mat-cell *matCellDef="let row"> {{row.texto}}</td>
+                </ng-container>
+
+                <!-- Color Column -->
+                <ng-container matColumnDef="equipamento">
+                  <th id="equipamento" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Equipamento</th>
+                  <td mat-cell *matCellDef="let row"> {{row.equipamento}}</td>
+                </ng-container>
+
+                <!-- Color Column -->
+                <ng-container class="alerta-locaEquipamento" matColumnDef="localEquipamento">
+                  <th id="localEquipamento" mat-header-cell *matHeaderCellDef mat-sort-header>Local Equipamento</th>
+                  <td mat-cell *matCellDef="let row"> {{row.localEquipamento}} </td>
+                </ng-container>
+
+                <!-- Color Column -->
+                <ng-container matColumnDef="disparado">
+                  <th id="acao" mat-header-cell *matHeaderCellDef>Disparar Alerta</th>
+                  <td mat-cell *matCellDef="let row">
+                    <div class="example-button-row">
+                      <div class="example-flex-container">
+                        <div class="example-button-container">
+                          <button mat-fab color="primary" aria-label="Disparar Alerta" (click)="dispararAlerta(row.id)">
+                            <mat-icon>campaign</mat-icon>
+                          </button>
+                        </div>
                       </div>
-                      <div *ngIf="alerta.criticidade == 'Informacao'" class="alert alert-info">
-                        <h6><i class="icon fas fa-info"></i>Informação</h6>
-                        {{ alerta.texto }}
-                      </div>
-                      <div *ngIf="alerta.criticidade == 'Cuidado'" class="alert alert-warning">
-                        <h6><i class="icon fas fa-exclamation-triangle"></i>Cuidado</h6>
-                        {{ alerta.texto }}
-                      </div>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row class="alerta-row" *matRowDef="let row; columns: displayedColumns;"></tr>
 
-                    </td>
-                  </tr>
-                </tbody>
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                  <td class="mat-cell" colspan="4">Sem alertas para a consulta : {{input.value}}</td>
+                </tr>
               </table>
             </div>
-            <!-- /.card-body -->
           </div>
-          <!-- /.card -->
-        <!-- END ALERTS -->
-          <!-- /.nav-tabs-custom -->
+          <!-- /.card-body -->
         </div>
-        <!-- /.col -->
+        <!-- /.card -->
+        <!-- END ALERTS -->
+        <!-- /.nav-tabs-custom -->
       </div>
-      <!-- /.row -->
+      <!-- /.col -->
     </div>
-    <!-- /.container-fluid -->
-  </section>
-
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
