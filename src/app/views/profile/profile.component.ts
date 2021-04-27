@@ -40,7 +40,6 @@ export class ProfileComponent implements OnInit {
       this.usuarioService.findByEmail(localUser.email).subscribe(
         responseUser => {
           this.usuarioDTO = responseUser as UsuarioDTO;
-
         },
         error => {});
 

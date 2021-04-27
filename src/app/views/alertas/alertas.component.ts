@@ -9,7 +9,10 @@ import { AlertaService } from '../../utils/services/alerta.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
+import { StorageService } from 'src/app/utils/services/storage.service';
+import { UsuarioService } from 'src/app/utils/services/usuario.service';
+import { AlertaMensagem } from '../../models/alerta.mensagem.models';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 
 @Component({
@@ -19,7 +22,8 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class AlertasComponent implements OnInit, AfterViewInit  {
 
-  listaAlerta?: AlertaDTO[] = []
+  listaAlerta?: AlertaDTO[] = [];
+
 
   dataSource = new MatTableDataSource(this.listaAlerta);
 
@@ -32,18 +36,24 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
+  today: number;
+
   constructor(
     private renderer: Renderer2,
     private router: Router,
     private formBuilder: FormBuilder,
     public auth: LoginService,
     public alertaService: AlertaService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    public storage: StorageService,
+    public usuarioService: UsuarioService
+
   ) {
       this.alertaForm = this.formBuilder.group({
-      id: ['', []],
-      texto: ['', [Validators.required]],
-      criticidade: ['', [Validators.required]]});
+        id: ['', []],
+        texto: ['', [Validators.required]],
+        criticidade: ['', [Validators.required]]
+      });
     }
 
   ngAfterViewInit() {
@@ -52,6 +62,8 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   }
 
   ngOnInit(): void {
+
+
     this.renderer.addClass(document.querySelector('app-root'), 'alerta-page');
 
     this.auth.refreshToken().subscribe(
@@ -83,10 +95,19 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   }
 
   inserirAlerta() {
-    this.alertaService.insert(this.alertaForm.value).subscribe(
+
+    const formValues = this.alertaForm.value;
+    const dateBrazil = new Date() // I'm in Brazil, you should have or get the user timezone.
+    const dateUtc = zonedTimeToUtc(dateBrazil, 'America/Sao_Paulo')
+
+
+    const localUser = this.storage.getLocalUser();
+    const alerta: AlertaMensagem = new AlertaMensagem(null,formValues.texto, formValues.criticidade, dateUtc.toISOString(), "Aplicação Web", 1, localUser.email);
+
+    this.alertaService.insert(alerta).subscribe(
       response => {
-        this.alertaDTO = response;
         this.loadData();
+        this.toastr.success('Alerta', 'Alerta disparado com sucesso.');
       },
       error => {
         this.toastr.error('Alerta', 'inserir o alerta : ' + error);
@@ -125,8 +146,10 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   dispararAlerta(idAlerta) {
     this.alertaService.enviarAlerta(idAlerta).subscribe(resp => {
       this.toastr.success('Alerta', 'Alerta disparado com Sucesso');
+      this.loadData();
     },error => {
       this.toastr.error('Alerta', 'Falha ao disparar o Alerta. Erro: ' + error);
+      this.loadData();
     });
   }
 
@@ -135,3 +158,7 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   }
 
 }
+function moment(): any {
+  throw new Error('Function not implemented.');
+}
+

@@ -1,3 +1,4 @@
+import { AlertaMensagem } from './../../models/alerta.mensagem.models';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -19,16 +20,12 @@ export class AlertaService {
     return this.http.get<AlertaDTO[]>(`${API_CONFIG.baseUrl}/alertas/alertaEmitido`);
   }
 
-  findById(id: string) {
-    return this.http.get<AlertaDTO>(`${API_CONFIG.baseUrl}/alertas/${id}`);
-  }
-
   enviarAlerta(id: string) {
-    return this.http.get<Alerta>(`${API_CONFIG.baseUrl}/alertas/enviarAlerta/${id}`);
+    return this.http.get<AlertaMensagem>(`${API_CONFIG.baseUrl}/alertas/enviarAlerta/${id}`);
   }
 
-  insert(obj: Alerta): Observable<Alerta> {
-    return this.http.post<Alerta>(`${API_CONFIG.baseUrl}/alertas`, obj);
+  insert(obj: AlertaMensagem): Observable<AlertaMensagem> {
+    return this.http.post<AlertaMensagem>(`${API_CONFIG.baseUrl}/alertas`, obj);
   }
 
   delete(id: string) {
