@@ -5,7 +5,7 @@
   "instante": "30/09/2019 01:32",
   "criticidade": "Alta",
   "equipamento": "Sensor de Fogo",
-  "localEquipamento": "Laboratorio de Informatica 01"
+  "locallizacao": "Laboratorio de Informatica 01"
 }
 */
 export interface AlertaDTO {
@@ -14,6 +14,6 @@ export interface AlertaDTO {
   instante: string;
   criticidade: string;
   equipamento: string;
-  localEquipamento: string;
+  localizacao: string;
   disparado: string;
 }

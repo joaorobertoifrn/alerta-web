@@ -18,68 +18,81 @@
     <!-- /.container-fluid -->
   </div>
   <!-- /.content-header -->
-
   <!-- Main content -->
   <section class="content">
     <div class="container-fluid">
       <!-- Small boxes (Stat box) -->
       <div class="row">
-        <div class="col-lg-3 col-6">
-
-          <!-- small box -->
-          <div class="small-box bg-info">
-            <div class="inner">
-              <h3>0</h3>
-              <p>Usuários Cadastrados</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-bag"></i>
-            </div>
-          </div>
-        </div>
-        <!-- ./col -->
-
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-2 col-6">
           <!-- small box -->
           <div class="small-box bg-success">
-            <div class="inner">
-              <h3>{{dashboard.alertaInformacao}}</h3>
-              <p>Alerta Informativos</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-stats-bars"></i>
+            <div class="row">
+              <div class="budget col-lg-7">
+                  <h3>{{dashboardAlertas.alertasRecebidos}}</h3>
+                  <p>Alertas Recebidos</p>
+              </div>
+              <div class="icon">
+                <em class="fas fa-arrow-down fa-4x"></em>
+              </div>
             </div>
           </div>
         </div>
-
-        <!-- ./col -->
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-2 col-6">
+          <!-- small box -->
+          <div class="small-box bg-success">
+            <div class="row">
+              <div class="budget col-lg-7">
+                  <h3>{{dashboardAlertas.alertasDisparados}}</h3>
+                  <p>Alertas Disparados</p>
+              </div>
+              <div class="icon">
+                <em class="fas fa-arrow-up fa-4x"></em>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-8">
+          <!-- small box -->
+          <div class="small-box bg-info">
+            <div class="row">
+              <div class="budget col-lg-7">
+                <h3>{{dashboard.alertaInformacao}}</h3>
+                <p>Alerta Informativos</p>
+              </div>
+              <div class="icon">
+                <em class="fas fa-info-circle fa-4x"></em>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-2 col-6">
           <!-- small box -->
           <div class="small-box bg-warning">
-            <div class="inner">
-              <h3>{{dashboard.alertaCuidado}}</h3>
-              <p>Alertas Cuidado</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person-add"></i>
+            <div class="row">
+              <div class="budget col-lg-7">
+                  <h3>{{dashboard.alertaCuidado}}</h3>
+                  <p>Alertas Cuidado</p>
+              </div>
+              <div class="icon">
+                <em class="fas fa-exclamation-triangle fa-4x"></em>
+              </div>
             </div>
           </div>
         </div>
-        <!-- ./col -->
-
-        <div class="col-lg-3 col-6">
+        <div class="col-lg-2 col-6">
           <!-- small box -->
           <div class="small-box bg-danger">
-            <div class="inner">
-              <h3>{{dashboard.alertaEmergencia}}</h3>
-              <p>Alertas Emergência</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
+            <div class="row">
+              <div class="budget col-lg-7">
+                  <h3>{{dashboard.alertaEmergencia}}</h3>
+                  <p>Alertas Emergência</p>
+              </div>
+              <div class="icon">
+                <em class="fas fa-bullhorn fa-4x"></em>
+              </div>
             </div>
           </div>
         </div>
-        <!-- ./col -->
         <div class="col-md-12">
           <!-- START ALERTS -->
           <div class="card card-info card-outline card-tela">
@@ -92,71 +105,48 @@
                 <mat-label >Filtro</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Texto" #input>
               </mat-form-field>
-
               <div class="mat-elevation-z8">
                 <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
-
                   <!-- ID Column -->
                   <ng-container  matColumnDef="id">
                     <th id="id" mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
                     <td mat-cell *matCellDef="let row">{{row.id}}</td>
                   </ng-container>
-
                   <!-- Progress Column -->
                   <ng-container matColumnDef="instante">
                     <th id="instante" mat-header-cell *matHeaderCellDef mat-sort-header> Data </th>
                     <td mat-cell *matCellDef="let row"> {{row.instante}}</td>
                   </ng-container>
-
                   <!-- Name Column -->
                   <ng-container matColumnDef="criticidade">
                     <th id="criticidade" mat-header-cell  *matHeaderCellDef mat-sort-header>Nivel Alerta</th>
                     <td mat-cell *matCellDef="let row"> {{row.criticidade}}</td>
                   </ng-container>
-
                   <!-- Color Column -->
                   <ng-container matColumnDef="texto">
                     <th id="texto" mat-header-cell *matHeaderCellDef mat-sort-header>Mensagem</th>
                     <td mat-cell *matCellDef="let row"> {{row.texto}}</td>
                   </ng-container>
-
                   <!-- Color Column -->
                   <ng-container matColumnDef="equipamento">
                     <th id="equipamento" mat-header-cell *matHeaderCellDef mat-sort-header>Tipo Equipamento</th>
                     <td mat-cell *matCellDef="let row"> {{row.equipamento}}</td>
                   </ng-container>
-
                   <!-- Color Column -->
-                  <ng-container class="alerta-locaEquipamento" matColumnDef="localEquipamento">
-                    <th id="localEquipamento" mat-header-cell *matHeaderCellDef mat-sort-header>Local Equipamento</th>
-                    <td mat-cell *matCellDef="let row"> {{row.localEquipamento}} </td>
+                  <ng-container class="alerta-localizacao" matColumnDef="localizacao">
+                    <th id="localizacao" mat-header-cell *matHeaderCellDef mat-sort-header>Local Equipamento</th>
+                    <td mat-cell *matCellDef="let row"> {{row.localizacao}} </td>
                   </ng-container>
-
                   <!-- Color Column -->
-                  <ng-container matColumnDef="disparado">
-                    <th id="acao" mat-header-cell *matHeaderCellDef>Disparar Alerta</th>
-                    <td mat-cell *matCellDef="let row">
-                      <div class="example-button-row">
-                        <div class="example-flex-container">
-                          <div class="example-button-container">
-                            <button mat-fab color="primary" aria-label="Disparar Alerta" (click)="dispararAlerta(row.id)">
-                              <mat-icon>campaign</mat-icon>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                  </ng-container>
-
 
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row class="alerta-row" *matRowDef="let row; columns: displayedColumns;"></tr>
-
                   <!-- Row shown when there is no matching data. -->
                   <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell" colspan="4">Sem Alertas!!</td>
                   </tr>
                 </table>
+                <mat-paginator [length]="totalElementos" [pageSize]="tamanho" [pageSizeOptions]="pageSizeOptions" (page)="paginar($event)" ></mat-paginator>
               </div>
             </div>
             <!-- /.card-body -->
@@ -165,11 +155,6 @@
           <!-- END ALERTS -->
           <!-- /.nav-tabs-custom -->
         </div>
-
-
-
-
-
       </div>
       <!-- /.row -->
     </div>

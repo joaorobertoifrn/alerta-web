@@ -46,7 +46,7 @@
               </div>
               <div class="form-group"></div>
 
-              <app-button [type]="'submit'" [block]="true" [text]="'Enviar'" [loading]="isAuthLoading"></app-button>
+              <app-button [type]="'submit'" [block]="true" [text]="'Enviar'"></app-button>
             </form>
           </div>
           <!-- /.card-body -->
@@ -101,9 +101,9 @@
                 </ng-container>
 
                 <!-- Color Column -->
-                <ng-container class="alerta-locaEquipamento" matColumnDef="localEquipamento">
-                  <th id="localEquipamento" mat-header-cell *matHeaderCellDef mat-sort-header>Local Equipamento</th>
-                  <td mat-cell *matCellDef="let row"> {{row.localEquipamento}} </td>
+                <ng-container class="alerta-locaEquipamento" matColumnDef="localizacao">
+                  <th id="localizacao" mat-header-cell *matHeaderCellDef mat-sort-header>Local Equipamento</th>
+                  <td mat-cell *matCellDef="let row"> {{row.localizacao}} </td>
                 </ng-container>
 
                 <!-- Color Column -->
@@ -129,6 +129,7 @@
                   <td class="mat-cell" colspan="4">Sem alertas para a consulta : {{input.value}}</td>
                 </tr>
               </table>
+              <mat-paginator [length]="totalElementos" [pageSize]="tamanho" [pageSizeOptions]="pageSizeOptions" (page)="paginar($event)" ></mat-paginator>
             </div>
           </div>
           <!-- /.card-body -->

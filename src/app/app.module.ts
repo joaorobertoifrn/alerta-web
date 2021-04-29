@@ -8,6 +8,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSortModule } from '@angular/material/sort';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -67,6 +69,8 @@ registerLocaleData(localeEn, 'en-EN');
     MatPaginatorModule,
     MatButtonModule,
     MatIconModule,
+    MatSortModule,
+    MatProgressSpinnerModule,
     FormsModule,
     AppRoutingModule,
     ReactiveFormsModule,

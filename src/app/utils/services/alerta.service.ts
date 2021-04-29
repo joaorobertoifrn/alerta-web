@@ -1,23 +1,29 @@
 import { AlertaMensagem } from './../../models/alerta.mensagem.models';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { StorageService } from './storage.service';
 import { API_CONFIG } from 'src/app/config/api.config';
 import { AlertaDTO } from 'src/app/models/dto/alertaDTO.model';
-import { Alerta } from 'src/app/models/alerta.models';
+import { AlertaPagina } from '../../models/alerta.pagina.model';
 
 @Injectable()
 export class AlertaService {
   constructor(public http: HttpClient, public storage: StorageService) {}
 
-  findAll(): Observable<AlertaDTO[]> {
-    return this.http.get<AlertaDTO[]>(`${API_CONFIG.baseUrl}/alertas`);
+  findAllAlertaRecebido(page, size): Observable<AlertaPagina> {
+    const params = new HttpParams()
+    .set('page', page)
+    .set('size', size);
+    return this.http.get<any>(`${API_CONFIG.baseUrl}/alertas/pagina/recebido?${params.toString()}`);
   }
 
-  findAlertaEmitido(): Observable<AlertaDTO[]> {
-    return this.http.get<AlertaDTO[]>(`${API_CONFIG.baseUrl}/alertas/alertaEmitido`);
+  findAllAlertaDisparado(page, size): Observable<AlertaPagina> {
+    const params = new HttpParams()
+    .set('page', page)
+    .set('size', size);
+    return this.http.get<any>(`${API_CONFIG.baseUrl}/alertas/pagina/disparado?${params.toString()}`);
   }
 
   enviarAlerta(id: string) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,13 +6,12 @@ import { ToastrService } from 'ngx-toastr';
 import { AlertaDTO } from 'src/app/models/dto/alertaDTO.model';
 import { LoginService } from 'src/app/utils/services/login.service';
 import { AlertaService } from '../../utils/services/alerta.service';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { StorageService } from 'src/app/utils/services/storage.service';
 import { UsuarioService } from 'src/app/utils/services/usuario.service';
 import { AlertaMensagem } from '../../models/alerta.mensagem.models';
 import { zonedTimeToUtc } from 'date-fns-tz';
+import { PageEvent } from '@angular/material/paginator';
 
 
 @Component({
@@ -20,21 +19,20 @@ import { zonedTimeToUtc } from 'date-fns-tz';
   templateUrl: './alertas.component.html',
   styleUrls: ['./alertas.component.css']
 })
-export class AlertasComponent implements OnInit, AfterViewInit  {
+export class AlertasComponent implements OnInit {
 
+  alertaDTO?: AlertaDTO;
+  dataSource: MatTableDataSource<AlertaDTO>;
   listaAlerta?: AlertaDTO[] = [];
 
+  totalElementos = 0;
+  pagina = 0;
+  tamanho = 5;
+  pageSizeOptions: number[] = [5];
 
-  dataSource = new MatTableDataSource(this.listaAlerta);
+  displayedColumns: string[] = ['id', 'instante','criticidade', 'texto', 'equipamento', 'localizacao', 'disparado'];
 
-  displayedColumns: string[] = ['id', 'instante','criticidade', 'texto', 'equipamento', 'localEquipamento', 'disparado'];
-
-  public alertaDTO: AlertaDTO;
   public alertaForm: FormGroup;
-  public isAuthLoading = false;
-
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
 
   today: number;
 
@@ -56,14 +54,7 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
       });
     }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-
   ngOnInit(): void {
-
-
     this.renderer.addClass(document.querySelector('app-root'), 'alerta-page');
 
     this.auth.refreshToken().subscribe(
@@ -88,10 +79,6 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
   }
 
   inserirAlerta() {
@@ -108,6 +95,7 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
       response => {
         this.loadData();
         this.toastr.success('Alerta', 'Alerta disparado com sucesso.');
+        this.alertaForm.reset();
       },
       error => {
         this.toastr.error('Alerta', 'inserir o alerta : ' + error);
@@ -118,29 +106,32 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
   }
 
   loadData() {
-    this.alertaService.findAlertaEmitido().subscribe(
+    this.listarAlertasRecebidos(this.pagina, this.tamanho);
+    this.loadAlertaEmitidoTimer();
+  }
+
+  listarAlertasRecebidos( pagina: number, tamanho: number ) {
+    this.alertaService.findAllAlertaRecebido(pagina,tamanho).subscribe(
       response => {
-        this.listaAlerta = response;
+        this.listaAlerta = response.content;
+        this.totalElementos = response.totalElements;
+        this.pagina = response.number;
         this.dataSource = new MatTableDataSource(this.listaAlerta);
-      },
+        },
       error => {
         this.toastr.error('Alerta', 'Falha ao carregar a lista  dos Alertas. Erro: ' + error);
       });
-
-    this.loadAlertaEmitidoTimer();
   }
 
   loadAlertaEmitidoTimer() {
     setInterval (()=> {
-      this.alertaService.findAlertaEmitido().subscribe(
-        response => {
-          this.listaAlerta = response;
-          this.dataSource = new MatTableDataSource(this.listaAlerta);
-          },
-        error => {
-          this.toastr.error('Alerta', 'Falha ao carregar a lista  dos Alertas. Erro: ' + error);
-        });
+      this.listarAlertasRecebidos(this.pagina, this.tamanho);
     },60000)
+  }
+
+  paginar(event: PageEvent) {
+    this.pagina = event.pageIndex;
+    this.listarAlertasRecebidos(this.pagina, this.tamanho);
   }
 
   dispararAlerta(idAlerta) {
@@ -157,8 +148,5 @@ export class AlertasComponent implements OnInit, AfterViewInit  {
     this.renderer.removeClass(document.querySelector('app-root'), 'alerta-page');
   }
 
-}
-function moment(): any {
-  throw new Error('Function not implemented.');
 }
 
